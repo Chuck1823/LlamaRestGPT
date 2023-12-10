@@ -10,22 +10,24 @@ from langchain import OpenAI
 
 from utils import reduce_openapi_spec, ColorPrint
 from model import RestGPT
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from langchain.llms import LlamaCpp
 
 logger = logging.getLogger()
 
 
 def main():
     config = yaml.load(open('config.yaml', 'r'), Loader=yaml.FullLoader)
-    os.environ["OPENAI_API_KEY"] = config['openai_api_key']
+    # os.environ["OPENAI_API_KEY"] = config['openai_api_key']
     os.environ['SPOTIPY_CLIENT_ID'] = config['spotipy_client_id']
     os.environ['SPOTIPY_CLIENT_SECRET'] = config['spotipy_client_secret']
     os.environ['SPOTIPY_REDIRECT_URI'] = config['spotipy_redirect_uri']
 
     query_idx = 1
 
-    log_dir = os.path.join("logs", "restgpt_spotify")
+    log_dir = os.path.join("logs", "llamarestgpt_spotify")
     if not os.path.exists(log_dir):
-        os.mkdir(log_dir)
+        os.makedirs(log_dir)
         
     logging.basicConfig(
         format="%(message)s",
@@ -46,8 +48,14 @@ def main():
 
     requests_wrapper = Requests(headers=headers)
 
-    llm = OpenAI(model_name="text-davinci-003", temperature=0.0, max_tokens=700)
+    # llm = OpenAI(model_name="text-davinci-003", temperature=0.0, max_tokens=700)
     # llm = OpenAI(model_name="gpt-3.5-turbo-0301", temperature=0.0)
+
+    # tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
+    # llm = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-hf")
+
+    llm = LlamaCpp(model_path="/Users/charles/Workspace/Columbia/NNDL_COMS4995/final_project/llama-2-7b-chat.Q4_K_M.gguf", n_ctx=4096)
+
     rest_gpt = RestGPT(llm, api_spec=api_spec, scenario='spotify', requests_wrapper=requests_wrapper, simple_parser=False)
 
     queries = json.load(open('datasets/spotify.json', 'r'))
