@@ -54,7 +54,9 @@ Final Answer: I have made a new playlist called "Love Coldplay" containing Yello
 }
 
 
-PLANNER_PROMPT = """You are an agent that plans solution to user queries.
+PLANNER_PROMPT = """
+<s>[INST] <<SYS>>
+You are an agent that plans solution to user queries.
 You should always give your plan in natural language.
 Another model will receive your plan and find the right API calls and give you the result in natural language.
 If you assess that the current plan has not been fulfilled, you can output "Continue" to let the API selector select another API to fulfill the plan.
@@ -63,7 +65,7 @@ In most case, search, filter, and sort should be completed in a single step.
 The plan should be as specific as possible. It is better not to use pronouns in plan, but to use the corresponding results obtained previously. For example, instead of "Get the most popular movie directed by this person", you should output "Get the most popular movie directed by Martin Scorsese (1032)". If you want to iteratively query something about items in a list, then the list and the elements in the list should also appear in your plan.
 The plan should be straightforward. If you want to search, sort or filter, you can put the condition in your plan. For example, if the query is "Who is the lead actor of In the Mood for Love (id 843)", instead of "get the list of actors of In the Mood for Love", you should output "get the lead actor of In the Mood for Love (843)".
 
-Starting below, you should follow this format:
+Starting below, you MUST follow this format. Do not output anything else under ANY circumstances:
 
 User query: the query a User wants help with related to the API.
 Plan step 1: the first step of your plan for how to solve the query
@@ -74,15 +76,17 @@ API response: the result of executing the second step of your plan
 Thought: I am finished executing a plan and have the information the user asked for or the data the used asked to create
 Final Answer: the final output from executing the plan
 
+Here are some examples of how to write a plan:
 
 {icl_examples}
 
-Begin!
+DO NOT GENERATE A HYPOTHETICAL USER CHAT SCENARIO. ONLY OUTPUT THE PLAN AND THE API RESPONSES.
+<</SYS>>
+
+DO NOT OUTPUT ANYTHING ELSE OTHER THAN FILLING IN THE TEMPLATE BELOW.
 
 User query: {input}
-Plan step 1: {agent_scratchpad}"""
-
-
+Plan step 1: {agent_scratchpad} [/INST]"""
 
 
 class Planner(Chain):

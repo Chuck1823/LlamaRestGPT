@@ -54,7 +54,7 @@ def main():
     # tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
     # llm = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-hf")
 
-    llm = LlamaCpp(model_path="/Users/charles/Workspace/Columbia/NNDL_COMS4995/final_project/llama-2-7b-chat.Q4_K_M.gguf", n_ctx=4096)
+    llm = LlamaCpp(model_path="/Users/charles/Workspace/Columbia/NNDL_COMS4995/final_project/llama-2-7b-chat.Q4_K_M.gguf", n_ctx=8192)
 
     rest_gpt = RestGPT(llm, api_spec=api_spec, scenario='spotify', requests_wrapper=requests_wrapper, simple_parser=False)
 
