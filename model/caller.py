@@ -15,7 +15,7 @@ from langchain.requests import RequestsWrapper
 from langchain.prompts.prompt import PromptTemplate
 from langchain.llms.base import BaseLLM
 
-from transformers import LlamaTokenizer
+from transformers import LlamaTokenizerFast
 
 
 from utils import simplify_json, get_matched_endpoint, ReducedOpenAPISpec, fix_json_error
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 CALLER_PROMPT =  """
-<s>[INST] <<SYS>>
+<s>[INST]
 You are an agent that gets a sequence of API calls and given their documentation, should execute them and return the final response.
 If you cannot complete them and run into issues, you should explain the issue. If you're able to resolve an API call, you can retry the API call. When interacting with API objects, you should extract ids for inputs to other API calls but ids and names for outputs returned to the User.
 Your task is to complete the corresponding api calls according to the plan.
@@ -88,13 +88,13 @@ Plan: the plan of API calls to execute
 
 You should execute the plan faithfully and give the Final Answer as soon as you successfully call the planned APIs, don't get clever and make up steps that don't exist in the plan. Do not make up APIs that don't exist in the plan. For example, if the plan is "GET /search/person to search for the director "Lee Chang dong"", do not call "GET /person/{{person_id}}/movie_credits" to get the credit of the person.
 
-Starting below, you MUST follow this format. Do not output anything else under ANY circumstances:
+Starting below, you must follow this format:
 
 Background: background information which you can use to execute the plan, e.g., the id of a person.
 Plan: the plan of API calls to execute
 Thought: you should always think about what to do
 Operation: the request method to take, should be one of the following: GET, POST, DELETE, PATCH, PUT
-Input: the input to the Operation described above
+Input: the input to the operation
 Response: the output of the operation
 Thought: I am finished executing the plan (or, I cannot finish executing the plan without knowing some other information.)
 Execution Result: based on the API response, the execution result of the API calling plan.
@@ -105,14 +105,12 @@ The execution result should satisfy the following conditions:
 3. If the plan includes expressions such as "most", you should choose the first item from the response. For example, if the plan is "GET /trending/tv/day to get the most trending TV show today", you should choose the first item from the response.
 4. The execution result should be natural language and as verbose as possible. It must contain the information needed in the plan.
 
-DO NOT GENERATE A HYPOTHETICAL USER CHAT SCENARIO. ONLY OUTPUT THE OPERATION, INPUT, RESPONSE, THOUGHT AND THE EXECUTION RESULT.
-<</SYS>>
-
-DO NOT OUTPUT ANYTHING ELSE OTHER THAN FILLING IN THE TEMPLATE BELOW.
+Begin!
 
 Background: {background}
 Plan: {api_plan}
-Thought: {agent_scratchpad} [/INST]"""
+Thought: {agent_scratchpad}
+[/INST]"""
 
 
 
@@ -270,7 +268,7 @@ class Caller(Chain):
             tmp_docs.pop("responses")
         tmp_docs = yaml.dump(tmp_docs)
         # encoder = tiktoken.encoding_for_model('text-davinci-003')
-        encoder = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat")
+        encoder = LlamaTokenizerFast.from_pretrained("mistralai/Mistral-7B-v0.1")
         encoded_docs = encoder.encode(tmp_docs)
         if len(encoded_docs) > 1500:
             tmp_docs = encoder.decode(encoded_docs[:1500])

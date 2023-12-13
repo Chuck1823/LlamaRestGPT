@@ -11,7 +11,7 @@ from langchain import OpenAI
 from utils import reduce_openapi_spec, ColorPrint
 from model import RestGPT
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from langchain.llms import LlamaCpp
+from langchain.llms import Ollama, LlamaCpp
 
 logger = logging.getLogger()
 
@@ -54,7 +54,7 @@ def main():
     # tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
     # llm = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-hf")
 
-    llm = LlamaCpp(model_path="/Users/charles/Workspace/Columbia/NNDL_COMS4995/final_project/llama-2-7b-chat.Q4_K_M.gguf", n_ctx=8192)
+    llm = LlamaCpp(model_path="/Users/charles/Workspace/Columbia/NNDL_COMS4995/final_project/mistral-7b-instruct-v0.2.Q6_K.gguf", n_ctx=8192, temperature=0.2, top_k=2, top_p=0.1)
 
     rest_gpt = RestGPT(llm, api_spec=api_spec, scenario='spotify', requests_wrapper=requests_wrapper, simple_parser=False)
 

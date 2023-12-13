@@ -13,7 +13,7 @@ from langchain.chains.llm import LLMChain
 from langchain.prompts.prompt import PromptTemplate
 from langchain.llms.base import BaseLLM
 
-from transformers import LlamaTokenizer
+from transformers import LlamaTokenizerFast
 
 from utils import simplify_json
 
@@ -23,7 +23,7 @@ RESPONSE_SCHEMA_MAX_LENGTH = 5000
 
 
 CODE_PARSING_SCHEMA_TEMPLATE = """
-<s>[INST] <<SYS>>
+<s>[INST]
 Here is an API response schema from an OAS and a query. 
 The API's response will follow the schema and be a JSON. 
 Assume you are given a JSON response which is stored in a python dict variable called 'data', your task is to generate Python code to extract information I need from the API response.
@@ -56,12 +56,13 @@ The code you generate should satisfy the following requirements:
 2. If the response is something about X, e.g., the movies credits of Lee Chang-dong, then the filter condition cannot include searching for X (e.g., Lee Chang-dong). For example, the API response is the movie credits of Akira Kurosawa and the instruction is what are the ids of the movies directed by him. Then the your code should not contain "movie['title'] == 'Akira Kurosawa'" or "movie['name'] == 'Akira Kurosawa'"
 3. Do not use f-string in the print function. Use "format" instead. For example, use "print('The release date of the album is {{}}'.format(date))" instead of "print(f'The release date of the album is {{date}}')
 4. Please print the final result as brief as possible. If the result is a list, just print it in one sentence. Do not print each item in a new line.
-<</SYS>>
 
-Python Code: [/INST]"""
+Begin!
+Python Code: 
+[/INST]"""
 
 CODE_PARSING_RESPONSE_TEMPLATE = """
-<s>[INST] <<SYS>>
+<s>[INST]
 Here is an API response JSON snippet with its corresponding schema and a query. 
 The API's response JSON follows the schema.
 Assume the JSON response is stored in a python dict variable called 'data', your task is to generate Python code to extract information I need from the API response.
@@ -71,7 +72,6 @@ The example result format are:
 "The id of the person is 12345"
 Note you should generate only Python code.
 DO NOT use fields that are not in the response schema.
-<</SYS>>
 
 API: {api_path}
 API description: {api_description}
@@ -85,10 +85,11 @@ JSON snippet:
 {json}
 
 Query: {query}
-Python Code: [/INST]"""
+Python Code:
+[/INST]"""
 
 LLM_PARSING_TEMPLATE = """
-<s>[INST] <<SYS>>
+<s>[INST]
 Here is an API JSON response with its corresponding API description:
 
 API: {api_path}
@@ -105,12 +106,12 @@ The response is about: {response_description}
 Your task is to extract some information according to these instructions: {query}
 When working with API objects, you should usually use ids over names.
 If the response indicates an error, you should instead output a summary of the error.
-<</SYS>>
 
-Output: [/INST]"""
+Output:
+[/INST]"""
 
 LLM_SUMMARIZE_TEMPLATE = """
-<s>[INST] <<SYS>>
+<s>[INST]
 Here is an API JSON response with its corresponding API description:
 
 API: {api_path}
@@ -127,12 +128,12 @@ The response is about: {response_description}
 Your task is to extract some information according to these instructions: {query}
 If the response does not contain the needed information, you should translate the response JSON into natural language.
 If the response indicates an error, you should instead output a summary of the error.
-<</SYS>>
 
-Output: [/INST]"""
+Output:
+[/INST]"""
 
 CODE_PARSING_EXAMPLE_TEMPLATE = """
-<s>[INST] <<SYS>>
+<s>[INST]
 Here is an API response schema and a query. 
 The API's response will follow the schema and be a JSON. 
 Assume you are given a JSON response which is stored in a python dict variable called 'data', your task is to generate Python code to extract information I need from the API response.
@@ -140,7 +141,6 @@ Please print the final result.
 The example result format are:
 Note you should generate only Python code.
 DO NOT use fields that are not in the response schema.
-<</SYS>>
 
 API: {api_path}
 API description: {api_description}
@@ -149,20 +149,22 @@ Response example:
 {response_example}
 
 Query: {query}
-Python Code: [/INST]"""
+Python Code:
+[/INST]"""
 
 
 POSTPROCESS_TEMPLATE = """
-<s>[INST] <<SYS>>
+<s>[INST]
 Given a string, due to the maximum context length, the final item/sentence may be truncated and incomplete. First, remove the final truncated incomplete item/sentence. Then if the list are in brackets "[]", add bracket in the tail to make it a grammarly correct list. You should just output the final result.
 
 Example:
 Input: The ids and names of the albums from Lana Del Rey are [{{'id': '5HOHne1wzItQlIYmLXLYfZ', 'name': "Did you know that there's a tunnel under Ocean Blvd"}}, {{'id': '2wwCc6fcyhp1tfY3J6Javr', 'name': 'Blue Banisters'}}, {{'id': '6Qeos
 Output: The ids and names of the albums from Lana Del Rey are [{{'id': '5HOHne1wzItQlIYmLXLYfZ', 'name': "Did you know that there's a tunnel under Ocean Blvd"}}, {{'id': '2wwCc6fcyhp1tfY3J6Javr', 'name': 'Blue Banisters'}}]
-<</SYS>>
 
+Begin!
 Input: {truncated_str}
-Output:  [/INST] 
+Output:
+[/INST] 
 """
 
 
@@ -197,7 +199,7 @@ class ResponseParser(Chain):
     postprocess_prompt: PromptTemplate = None
     python_globals: Optional[Dict[str, Any]] = None
     python_locals: Optional[Dict[str, Any]] = None
-    encoder: tiktoken.Encoding = None
+    encoder: LlamaTokenizerFast = None
     max_json_length_1: int = 500
     max_json_length_2: int = 2000
     max_output_length: int = 500
@@ -223,7 +225,7 @@ class ResponseParser(Chain):
         elif 'application/json; charset=utf-8' in api_doc['responses']['content']:
             response_schema = json.dumps(api_doc['responses']['content']['application/json; charset=utf-8']["schema"]['properties'], indent=4)
         # encoder = tiktoken.encoding_for_model('text-davinci-003')
-        encoder = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat")
+        encoder = LlamaTokenizerFast.from_pretrained("mistralai/Mistral-7B-v0.1")
         encoded_schema = encoder.encode(response_schema)
         max_schema_length = 2500
         if len(encoded_schema) > max_schema_length:
@@ -349,7 +351,7 @@ class SimpleResponseParser(Chain):
 
     llm: BaseLLM
     llm_parsing_prompt: PromptTemplate = None
-    encoder: tiktoken.Encoding = None
+    encoder: LlamaTokenizerFast = None
     max_json_length: int = 1000
     output_key: str = "result"
     return_intermediate_steps: bool = False
@@ -366,7 +368,7 @@ class SimpleResponseParser(Chain):
                 input_variables=["query", "json", "api_param", "response_description"]
             )
             # encoder = tiktoken.encoding_for_model('text-davinci-003')
-            encoder = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat")
+            encoder = LlamaTokenizerFast.from_pretrained("mistralai/Mistral-7B-v0.1")
             super().__init__(llm=llm, llm_parsing_prompt=llm_parsing_prompt, encoder=encoder)
             return
 
@@ -380,7 +382,7 @@ class SimpleResponseParser(Chain):
         )
 
         # encoder = tiktoken.encoding_for_model('text-davinci-003')
-        encoder = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat")
+        encoder = LlamaTokenizerFast.from_pretrained("mistralai/Mistral-7B-v0.1")
 
         super().__init__(llm=llm, llm_parsing_prompt=llm_parsing_prompt, encoder=encoder)
 
