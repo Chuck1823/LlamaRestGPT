@@ -268,7 +268,7 @@ class Caller(Chain):
             tmp_docs.pop("responses")
         tmp_docs = yaml.dump(tmp_docs)
         # encoder = tiktoken.encoding_for_model('text-davinci-003')
-        encoder = LlamaTokenizerFast.from_pretrained("mistralai/Mistral-7B-v0.1")
+        encoder = LlamaTokenizerFast.from_pretrained("mistralai/Mistral-7B-v0.2")
         encoded_docs = encoder.encode(tmp_docs)
         if len(encoded_docs) > 1500:
             tmp_docs = encoder.decode(encoded_docs[:1500])

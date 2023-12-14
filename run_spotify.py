@@ -3,6 +3,7 @@ import json
 import logging
 import time
 import yaml
+import torch
 
 import spotipy
 from langchain.requests import Requests
@@ -54,7 +55,15 @@ def main():
     # tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
     # llm = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-hf")
 
-    llm = LlamaCpp(model_path="/Users/charles/Workspace/Columbia/NNDL_COMS4995/final_project/mistral-7b-instruct-v0.2.Q6_K.gguf", n_ctx=8192, temperature=0.2, top_k=2, top_p=0.1)
+    if torch.cuda.is_available():
+        logger.info("GPU available")
+        logger.info(f"Num GPUs Available: {torch.cuda.device_count()}")
+        logger.info(f"Current device: {torch.cuda.get_device_name(0)}")
+        torch.cuda.set_device(0)
+        llm = LlamaCpp(model_path="/Users/charles/Workspace/Columbia/NNDL_COMS4995/final_project/mistral-7b-instruct-v0.2.Q6_K.gguf", n_ctx=8192, temperature=0.1, top_k=2, top_p=0.2, n_gpu_layers=40, n_batch=512)
+    else:
+        logger.info("No GPU available")
+        llm = LlamaCpp(model_path="/Users/charles/Workspace/Columbia/NNDL_COMS4995/final_project/mistral-7b-instruct-v0.2.Q6_K.gguf", n_ctx=8192, temperature=0.1, top_k=2)
 
     rest_gpt = RestGPT(llm, api_spec=api_spec, scenario='spotify', requests_wrapper=requests_wrapper, simple_parser=False)
 
