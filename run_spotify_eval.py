@@ -25,12 +25,6 @@ def main():
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
         
-    logging.basicConfig(
-        format="%(message)s",
-        handlers=[logging.StreamHandler(ColorPrint()), logging.FileHandler(os.path.join(log_dir, f"{query_idx}.log"), mode='w', encoding='utf-8')],
-    )
-    logger.setLevel(logging.INFO)
-
     with open("specs/spotify_oas.json") as f:
         raw_api_spec = json.load(f)
 
@@ -60,6 +54,12 @@ def main():
     queries = [item['query'] for item in queries]
 
     for idx, query in enumerate(queries):
+        logging.basicConfig(
+            format="%(message)s",
+            handlers=[logging.StreamHandler(ColorPrint()), logging.FileHandler(os.path.join(log_dir, f"{idx}.log"), mode='w', encoding='utf-8')],
+        )
+        logger.setLevel(logging.INFO)
+
         logger.info(f"Processing query {idx + 1}: {query}")
         start_time = time.time()
         try:
