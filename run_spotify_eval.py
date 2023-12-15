@@ -66,6 +66,7 @@ def main():
             plan = rest_gpt.run(query)
         except Exception as e:
             logger.info(f"Exception occured when running the query: {e}")
+            continue
 
         logger.info(f"Execution Time: {time.time() - start_time}")
         logger.info(f"Plan: {plan['result']}")
