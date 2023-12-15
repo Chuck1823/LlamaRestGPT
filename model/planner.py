@@ -55,7 +55,7 @@ Final Answer: I have made a new playlist called "Love Coldplay" containing Yello
 
 
 PLANNER_PROMPT = """
-<s>[INST]
+[INST]
 You are an agent that plans solution to user queries.
 You should always give your plan in natural language.
 Another model will receive your plan and find the right API calls and give you the result in natural language.

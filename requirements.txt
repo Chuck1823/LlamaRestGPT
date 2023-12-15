@@ -22,7 +22,7 @@ jsonpointer==2.4
 langchain==0.0.348
 langchain-core==0.0.12
 langsmith==0.0.69
-llama_cpp_python==0.2.20
+llama_cpp_python==0.2.23
 MarkupSafe==2.1.3
 marshmallow==3.20.1
 mpmath==1.3.0

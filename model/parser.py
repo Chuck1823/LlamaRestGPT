@@ -23,7 +23,7 @@ RESPONSE_SCHEMA_MAX_LENGTH = 5000
 
 
 CODE_PARSING_SCHEMA_TEMPLATE = """
-<s>[INST]
+[INST]
 Here is an API response schema from an OAS and a query. 
 The API's response will follow the schema and be a JSON. 
 Assume you are given a JSON response which is stored in a python dict variable called 'data', your task is to generate Python code to extract information I need from the API response.
@@ -62,7 +62,7 @@ Python Code:
 [/INST]"""
 
 CODE_PARSING_RESPONSE_TEMPLATE = """
-<s>[INST]
+[INST]
 Here is an API response JSON snippet with its corresponding schema and a query. 
 The API's response JSON follows the schema.
 Assume the JSON response is stored in a python dict variable called 'data', your task is to generate Python code to extract information I need from the API response.
@@ -89,7 +89,7 @@ Python Code:
 [/INST]"""
 
 LLM_PARSING_TEMPLATE = """
-<s>[INST]
+[INST]
 Here is an API JSON response with its corresponding API description:
 
 API: {api_path}
@@ -111,7 +111,7 @@ Output:
 [/INST]"""
 
 LLM_SUMMARIZE_TEMPLATE = """
-<s>[INST]
+[INST]
 Here is an API JSON response with its corresponding API description:
 
 API: {api_path}
@@ -133,7 +133,7 @@ Output:
 [/INST]"""
 
 CODE_PARSING_EXAMPLE_TEMPLATE = """
-<s>[INST]
+[INST]
 Here is an API response schema and a query. 
 The API's response will follow the schema and be a JSON. 
 Assume you are given a JSON response which is stored in a python dict variable called 'data', your task is to generate Python code to extract information I need from the API response.
@@ -154,7 +154,7 @@ Python Code:
 
 
 POSTPROCESS_TEMPLATE = """
-<s>[INST]
+[INST]
 Given a string, due to the maximum context length, the final item/sentence may be truncated and incomplete. First, remove the final truncated incomplete item/sentence. Then if the list are in brackets "[]", add bracket in the tail to make it a grammarly correct list. You should just output the final result.
 
 Example:

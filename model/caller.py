@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 CALLER_PROMPT =  """
-<s>[INST]
+[INST]
 You are an agent that gets a sequence of API calls and given their documentation, should execute them and return the final response.
 If you cannot complete them and run into issues, you should explain the issue. If you're able to resolve an API call, you can retry the API call. When interacting with API objects, you should extract ids for inputs to other API calls but ids and names for outputs returned to the User.
 Your task is to complete the corresponding api calls according to the plan.

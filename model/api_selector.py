@@ -71,7 +71,7 @@ API response: Yellow is added to the player queue
 # Thought: I am finished executing the plan and have the information the user asked for or the data the used asked to create
 # Final Answer: the final output from executing the plan. If the user's query contains filter conditions, you need to filter the results as well. For example, if the user query is "Search for the first person whose name is 'Tom Hanks'", you should filter the results and only output the first person whose name is 'Tom Hanks'.
 API_SELECTOR_PROMPT = """
-<s>[INST]
+[INST]
 You are a planner that plans a sequence of RESTful API calls to assist with user queries against an API.
 Another API caller will receive your plan call the corresponding APIs and finally give you the result in natural language.
 The API caller also has filtering, sorting functions to post-process the response of APIs. Therefore, if you think the API response should be post-processed, just tell the API caller to do so.
