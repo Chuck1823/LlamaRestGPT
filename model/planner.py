@@ -56,40 +56,33 @@ Final Answer: I have made a new playlist called "Love Coldplay" containing Yello
 
 PLANNER_PROMPT = """
 <s>[INST]
-You are a planner that plans a sequence of RESTful API calls to assist with user queries against an API.
-Another API caller will receive your plan call the corresponding APIs and finally give you the result in natural language.
-The API caller also has filtering, sorting functions to post-process the response of APIs. Therefore, if you think the API response should be post-processed, just tell the API caller to do so.
-If you think you have got the final answer, do not make other API calls and just output the answer immediately. For example, the query is search for a person, you should just return the id and name of the person.
-
-----
-
-Here are name and description of available APIs.
-Do not use APIs that are not listed here.
-
-{endpoints}
-
-----
+You are an agent that plans solution to user queries.
+You should always give your plan in natural language.
+Another model will receive your plan and find the right API calls and give you the result in natural language.
+If you assess that the current plan has not been fulfilled, you can output "Continue" to let the API selector select another API to fulfill the plan.
+If you think you have got the final answer or the user query has been fulfilled, just output the answer immediately. If the query has not been fulfilled, you should continue to output your plan.
+In most case, search, filter, and sort should be completed in a single step.
+The plan should be as specific as possible. It is better not to use pronouns in plan, but to use the corresponding results obtained previously. For example, instead of "Get the most popular movie directed by this person", you should output "Get the most popular movie directed by Martin Scorsese (1032)". If you want to iteratively query something about items in a list, then the list and the elements in the list should also appear in your plan.
+The plan should be straightforward. If you want to search, sort or filter, you can put the condition in your plan. For example, if the query is "Who is the lead actor of In the Mood for Love (id 843)", instead of "get the list of actors of In the Mood for Love", you should output "get the lead actor of In the Mood for Love (843)".
 
 Starting below, you should follow this format:
 
-Background: background information which you can use to execute the plan, e.g., the id of a person, the id of tracks by Faye Wong. In most cases, you must use the background information instead of requesting these information again. For example, if the query is "get the poster for any other movie directed by Wong Kar-Wai (12453)", and the background includes the movies directed by Wong Kar-Wai, you should use the background information instead of requesting the movies directed by Wong Kar-Wai again.
-User query: the query a User wants help with related to the API
-API calling 1: the first api call you want to make. Note the API calling can contain conditions such as filtering, sorting, etc. For example, "GET /movie/18329/credits to get the director of the movie Happy Together", "GET /movie/popular to get the top-1 most popular movie". If user query contains some filter condition, such as the latest, the most popular, the highest rated, then the API calling plan should also contain the filter condition. If you think there is no need to call an API, output "No API call needed." and then output the final answer according to the user query and background information.
-API response: the response of API calling 1
-Instruction: Another model will evaluate whether the user query has been fulfilled. If the instruction contains "continue", then you should make another API call following this instruction.
-... (this API calling n and API response can repeat N times, but most queries can be solved in 1-2 step)
+User query: the query a User wants help with related to the API.
+Plan step 1: the first step of your plan for how to solve the query
+API response: the result of executing the first step of your plan, including the specific API call made.
+Plan step 2: based on the API response, the second step of your plan for how to solve the query. If the last step result is not what you want, you can output "Continue" to let the API selector select another API to fulfill the plan. For example, the last plan is "add a song (id xxx) in my playlist", but the last step API response is calling "GET /me/playlists" and getting the id of my playlist, then you should output "Continue" to let the API selector select another API to add the song to my playlist. Pay attention to the specific API called in the last step API response. If a inproper API is called, then the response may be wrong and you should give a new plan.
+API response: the result of executing the second step of your plan
+... (this Plan step n and API response can repeat N times)
+Thought: I am finished executing a plan and have the information the user asked for or the data the used asked to create
+Final Answer: the final output from executing the plan
 
 
 {icl_examples}
 
-
-Note, if the API path contains "{{}}", it means that it is a variable and you should replace it with the appropriate value. For example, if the path is "/users/{{user_id}}/tweets", you should replace "{{user_id}}" with the user id. "{{" and "}}" cannot appear in the url. In most cases, the id value is in the background or the API response. Just copy the id faithfully. If the id is not in the background, instead of creating one, call other APIs to query the id. For example, before you call "/users/{{user_id}}/playlists", you should get the user_id via "GET /me" first. Another example is that before you call "/person/{{person_id}}", you should get the movie_id via "/search/person" first.
-
 Begin!
 
-Background: {background}
-User query: {plan}
-API calling 1: {agent_scratchpad}
+User query: {input}
+Plan step 1: {agent_scratchpad}
 [/INST]"""
 
 
