@@ -1,0 +1,8 @@
+.cache
+.vscode/
+logs/
+model/__pycache__/
+utils/__pycache__/
+venv/
+.cache.swp
+config.yaml

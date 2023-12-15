@@ -54,7 +54,9 @@ Final Answer: I have made a new playlist called "Love Coldplay" containing Yello
 }
 
 
-PLANNER_PROMPT = """You are an agent that plans solution to user queries.
+PLANNER_PROMPT = """
+<s>[INST]
+You are an agent that plans solution to user queries.
 You should always give your plan in natural language.
 Another model will receive your plan and find the right API calls and give you the result in natural language.
 If you assess that the current plan has not been fulfilled, you can output "Continue" to let the API selector select another API to fulfill the plan.
@@ -80,9 +82,8 @@ Final Answer: the final output from executing the plan
 Begin!
 
 User query: {input}
-Plan step 1: {agent_scratchpad}"""
-
-
+Plan step 1: {agent_scratchpad}
+[/INST]"""
 
 
 class Planner(Chain):

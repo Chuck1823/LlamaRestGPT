@@ -104,7 +104,7 @@ def fix_json_error(data: str, return_str=True):
     except json.decoder.JSONDecodeError:
         data = data.split("\n")
         data = [line.strip() for line in data]
-        for i in range(len(data)):
+        for i in range(len(data) - 1):
             line = data[i]
             if line in ['[', ']', '{', '}']:
                 continue

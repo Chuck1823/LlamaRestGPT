@@ -15,6 +15,9 @@ from langchain.requests import RequestsWrapper
 from langchain.prompts.prompt import PromptTemplate
 from langchain.llms.base import BaseLLM
 
+from transformers import LlamaTokenizerFast
+
+
 from utils import simplify_json, get_matched_endpoint, ReducedOpenAPISpec, fix_json_error
 from .parser import ResponseParser, SimpleResponseParser
 
@@ -24,7 +27,9 @@ logger = logging.getLogger(__name__)
 
 
 
-CALLER_PROMPT = """You are an agent that gets a sequence of API calls and given their documentation, should execute them and return the final response.
+CALLER_PROMPT =  """
+<s>[INST]
+You are an agent that gets a sequence of API calls and given their documentation, should execute them and return the final response.
 If you cannot complete them and run into issues, you should explain the issue. If you're able to resolve an API call, you can retry the API call. When interacting with API objects, you should extract ids for inputs to other API calls but ids and names for outputs returned to the User.
 Your task is to complete the corresponding api calls according to the plan.
 
@@ -105,7 +110,7 @@ Begin!
 Background: {background}
 Plan: {api_plan}
 Thought: {agent_scratchpad}
-"""
+[/INST]"""
 
 
 
@@ -262,7 +267,8 @@ class Caller(Chain):
         if not self.with_response and 'responses' in tmp_docs:
             tmp_docs.pop("responses")
         tmp_docs = yaml.dump(tmp_docs)
-        encoder = tiktoken.encoding_for_model('text-davinci-003')
+        # encoder = tiktoken.encoding_for_model('text-davinci-003')
+        encoder = LlamaTokenizerFast.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
         encoded_docs = encoder.encode(tmp_docs)
         if len(encoded_docs) > 1500:
             tmp_docs = encoder.decode(encoded_docs[:1500])
