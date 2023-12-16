@@ -151,8 +151,7 @@ Response example:
 <|im_start|>user
 Query: {query}
 Python Code: <|im_end|>
-<|im_start|>assistant
-[/INST]"""
+<|im_start|>assistant"""
 
 
 POSTPROCESS_TEMPLATE = """
