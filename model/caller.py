@@ -316,7 +316,7 @@ class Caller(Chain):
             api_doc_for_parser = endpoint_docs_by_name.get(called_endpoint_name)
             if self.scenario == 'spotify' and endpoint_name == "GET /search":
                 if params is not None and 'type' in params:
-                    search_type = params['type'] + 's'
+                    search_type = params['type']
                 else:
                     params_in_url = json.loads(action_input)['url'].split('&')
                     for param in params_in_url:
