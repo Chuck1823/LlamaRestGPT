@@ -46,7 +46,7 @@ The input should be a JSON string which has 3 base keys: url, description, outpu
 The value of "url" should be a string.
 The value of "description" should describe what the API response is about. The description should be specific.
 The value of "output_instructions" should be instructions on what information to extract from the response, for example the id(s) for a resource(s) that the POST request creates. Note "output_instructions" MUST be natural language and as verbose as possible! It cannot be "return the full response". Output instructions should faithfully contain the contents of the api calling plan and be as specific as possible. The output instructions can also contain conditions such as filtering, sorting, etc.
-If you are using GET method, add "params" key, and the value of "params" should be a dict of key-value pairs. If there are multiple values, make sure to use a list.
+If you are using GET method, add "params" key, and the value of "params" should be a dict of key-value pairs.
 If you are using POST, PATCH or PUT methods, add "data" key, and the value of "data" should be a dict of key-value pairs.
 Remember to add a comma after every value except the last one, ensuring that the overall structure of the JSON remains valid.
 
