@@ -5,6 +5,7 @@ import time
 import yaml
 import torch
 import argparse
+import traceback
 
 import spotipy
 from langchain.requests import Requests
@@ -12,7 +13,6 @@ from langchain.requests import Requests
 from utils import reduce_openapi_spec, ColorPrint
 from model import RestGPT
 from langchain.llms import LlamaCpp
-import argparse
 
 logger = logging.getLogger()
 
@@ -23,20 +23,12 @@ def main(model_name):
     os.environ['SPOTIPY_CLIENT_SECRET'] = config['spotipy_client_secret']
     os.environ['SPOTIPY_REDIRECT_URI'] = config['spotipy_redirect_uri']
 
-    query_idx = 1
-
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
     log_dir = os.path.join("logs", "llamarestgpt_spotify")
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
         
-    logging.basicConfig(
-        format="%(message)s",
-        handlers=[logging.StreamHandler(ColorPrint()), logging.FileHandler(os.path.join(log_dir, f"{query_idx}.log"), mode='w', encoding='utf-8')],
-    )
-    logger.setLevel(logging.INFO)
-
     with open("specs/spotify_oas.json") as f:
         raw_api_spec = json.load(f)
 
@@ -79,13 +71,23 @@ def main(model_name):
     queries = json.load(open('datasets/spotify.json', 'r'))
     queries = [item['query'] for item in queries]
 
-    query = queries[query_idx - 1]
-    
-    logger.info(f"Query: {query}")
+    for idx, query in enumerate(queries):
+        logging.basicConfig(
+            format="%(message)s",
+            handlers=[logging.StreamHandler(ColorPrint()), logging.FileHandler(os.path.join(log_dir, f"{idx}.log"), mode='w', encoding='utf-8')],
+        )
+        logger.setLevel(logging.INFO)
 
-    start_time = time.time()
-    rest_gpt.run(query)
-    logger.info(f"Execution Time: {time.time() - start_time}")
+        logger.info(f"Processing query {idx + 1}: {query}")
+        start_time = time.time()
+        try:
+            plan = rest_gpt.run(query)
+        except Exception as e:
+            logger.info(f"Exception occured when running the query: {traceback.format_exc()}")
+            continue
+
+        logger.info(f"Execution Time: {time.time() - start_time}")
+        logger.info(f"Plan: {plan['result']}")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

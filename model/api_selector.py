@@ -71,7 +71,7 @@ API response: Yellow is added to the player queue
 # Thought: I am finished executing the plan and have the information the user asked for or the data the used asked to create
 # Final Answer: the final output from executing the plan. If the user's query contains filter conditions, you need to filter the results as well. For example, if the user query is "Search for the first person whose name is 'Tom Hanks'", you should filter the results and only output the first person whose name is 'Tom Hanks'.
 API_SELECTOR_PROMPT = """
-<s>[INST]
+<|im_start|>system
 You are a planner that plans a sequence of RESTful API calls to assist with user queries against an API.
 Another API caller will receive your plan call the corresponding APIs and finally give you the result in natural language.
 The API caller also has filtering, sorting functions to post-process the response of APIs. Therefore, if you think the API response should be post-processed, just tell the API caller to do so.
@@ -101,12 +101,12 @@ Instruction: Another model will evaluate whether the user query has been fulfill
 
 Note, if the API path contains "{{}}", it means that it is a variable and you should replace it with the appropriate value. For example, if the path is "/users/{{user_id}}/tweets", you should replace "{{user_id}}" with the user id. "{{" and "}}" cannot appear in the url. In most cases, the id value is in the background or the API response. Just copy the id faithfully. If the id is not in the background, instead of creating one, call other APIs to query the id. For example, before you call "/users/{{user_id}}/playlists", you should get the user_id via "GET /me" first. Another example is that before you call "/person/{{person_id}}", you should get the movie_id via "/search/person" first.
 
-Begin!
-
+Begin!<|im_end|>
+<|im_start|>user
 Background: {background}
 User query: {plan}
-API calling 1: {agent_scratchpad} 
-[/INST]"""
+API calling 1: {agent_scratchpad}<|im_end|>
+<|im_start|>assistant"""
 
 
 

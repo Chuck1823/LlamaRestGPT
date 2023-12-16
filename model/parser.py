@@ -23,7 +23,7 @@ RESPONSE_SCHEMA_MAX_LENGTH = 5000
 
 
 CODE_PARSING_SCHEMA_TEMPLATE = """
-<s>[INST]
+<|im_start|>system
 Here is an API response schema from an OAS and a query. 
 The API's response will follow the schema and be a JSON. 
 Assume you are given a JSON response which is stored in a python dict variable called 'data', your task is to generate Python code to extract information I need from the API response.
@@ -57,12 +57,13 @@ The code you generate should satisfy the following requirements:
 3. Do not use f-string in the print function. Use "format" instead. For example, use "print('The release date of the album is {{}}'.format(date))" instead of "print(f'The release date of the album is {{date}}')
 4. Please print the final result as brief as possible. If the result is a list, just print it in one sentence. Do not print each item in a new line.
 
-Begin!
-Python Code: 
-[/INST]"""
+Begin!<|im_end|>
+<|im_start|>user
+Python Code: <|im_end|>
+<|im_start|>assistant"""
 
 CODE_PARSING_RESPONSE_TEMPLATE = """
-<s>[INST]
+<|im_start|>system
 Here is an API response JSON snippet with its corresponding schema and a query. 
 The API's response JSON follows the schema.
 Assume the JSON response is stored in a python dict variable called 'data', your task is to generate Python code to extract information I need from the API response.
@@ -82,14 +83,14 @@ Response JSON schema defined in the OAS:
 {response_schema}
 
 JSON snippet:
-{json}
-
+{json}<|im_end|>
+<|im_start|>user
 Query: {query}
-Python Code:
-[/INST]"""
+Python Code: <|im_end|>
+<|im_start|>assistant"""
 
 LLM_PARSING_TEMPLATE = """
-<s>[INST]
+<|im_start|>system
 Here is an API JSON response with its corresponding API description:
 
 API: {api_path}
@@ -105,13 +106,13 @@ The response is about: {response_description}
 ====
 Your task is to extract some information according to these instructions: {query}
 When working with API objects, you should usually use ids over names.
-If the response indicates an error, you should instead output a summary of the error.
-
-Output:
-[/INST]"""
+If the response indicates an error, you should instead output a summary of the error.<|im_end|>
+<|im_start|>user
+Output: <|im_end|>
+<|im_start|>assistant"""
 
 LLM_SUMMARIZE_TEMPLATE = """
-<s>[INST]
+<|im_start|>system
 Here is an API JSON response with its corresponding API description:
 
 API: {api_path}
@@ -127,13 +128,13 @@ The response is about: {response_description}
 ====
 Your task is to extract some information according to these instructions: {query}
 If the response does not contain the needed information, you should translate the response JSON into natural language.
-If the response indicates an error, you should instead output a summary of the error.
-
-Output:
-[/INST]"""
+If the response indicates an error, you should instead output a summary of the error.<|im_end|>
+<|im_start|>user
+Output: <|im_end|>
+<|im_start|>assistant"""
 
 CODE_PARSING_EXAMPLE_TEMPLATE = """
-<s>[INST]
+<|im_start|>system
 Here is an API response schema and a query. 
 The API's response will follow the schema and be a JSON. 
 Assume you are given a JSON response which is stored in a python dict variable called 'data', your task is to generate Python code to extract information I need from the API response.
@@ -146,26 +147,26 @@ API: {api_path}
 API description: {api_description}
 
 Response example:
-{response_example}
-
+{response_example}<|im_end|>
+<|im_start|>user
 Query: {query}
-Python Code:
-[/INST]"""
+Python Code: <|im_end|>
+<|im_start|>assistant"""
 
 
 POSTPROCESS_TEMPLATE = """
-<s>[INST]
+<|im_start|>system
 Given a string, due to the maximum context length, the final item/sentence may be truncated and incomplete. First, remove the final truncated incomplete item/sentence. Then if the list are in brackets "[]", add bracket in the tail to make it a grammarly correct list. You should just output the final result.
 
 Example:
 Input: The ids and names of the albums from Lana Del Rey are [{{'id': '5HOHne1wzItQlIYmLXLYfZ', 'name': "Did you know that there's a tunnel under Ocean Blvd"}}, {{'id': '2wwCc6fcyhp1tfY3J6Javr', 'name': 'Blue Banisters'}}, {{'id': '6Qeos
 Output: The ids and names of the albums from Lana Del Rey are [{{'id': '5HOHne1wzItQlIYmLXLYfZ', 'name': "Did you know that there's a tunnel under Ocean Blvd"}}, {{'id': '2wwCc6fcyhp1tfY3J6Javr', 'name': 'Blue Banisters'}}]
 
-Begin!
+Begin!<|im_end|>
+<|im_start|>user
 Input: {truncated_str}
-Output:
-[/INST] 
-"""
+Output: <|im_end|>
+<|im_start|>assistant"""
 
 
 class PythonREPL(BaseModel):

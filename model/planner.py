@@ -55,7 +55,7 @@ Final Answer: I have made a new playlist called "Love Coldplay" containing Yello
 
 
 PLANNER_PROMPT = """
-<s>[INST]
+<|im_start|>system
 You are an agent that plans solution to user queries.
 You should always give your plan in natural language.
 Another model will receive your plan and find the right API calls and give you the result in natural language.
@@ -79,11 +79,11 @@ Final Answer: the final output from executing the plan
 
 {icl_examples}
 
-Begin!
-
+Begin!<|im_end|>
+<|im_start|>user
 User query: {input}
-Plan step 1: {agent_scratchpad}
-[/INST]"""
+Plan step 1: {agent_scratchpad}<|im_end|>
+<|im_start|>assistant"""
 
 
 class Planner(Chain):
