@@ -5,6 +5,7 @@ import time
 import yaml
 import torch
 import argparse
+import sys
 
 import spotipy
 from langchain.requests import Requests
@@ -82,7 +83,7 @@ def main(model_name):
         try:
             plan = rest_gpt.run(query)
         except Exception as e:
-            logger.info(f"Exception occured when running the query: {e}")
+            logger.info(f"Exception occured when running the query: {sys.exc_info()}")
             continue
 
         logger.info(f"Execution Time: {time.time() - start_time}")
