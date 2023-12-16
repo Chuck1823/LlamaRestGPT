@@ -84,9 +84,9 @@ Input: {{
 
 Example 4:
 Operation: GET
-Input: {
+Input: {{
     "url": "https://api.spotify.com/v1/search",
-    "params": {
+    "params": {{
         "q": "Mariah Carey",
         "type": ["track", "album"],
         "market": "US",
@@ -94,8 +94,8 @@ Input: {
         "offset": "0",
         "include_external": "audio",
         "order": "popularity desc"
-    }
-}
+    }}
+}}
 
 I will give you the background information and the plan you should execute.
 Background: background information which you can use to execute the plan, e.g., the id of a person.
