@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 CALLER_PROMPT =  """
-[INST]
+<|im_start|>system
 You are an agent that gets a sequence of API calls and given their documentation, should execute them and return the final response.
 If you cannot complete them and run into issues, you should explain the issue. If you're able to resolve an API call, you can retry the API call. When interacting with API objects, you should extract ids for inputs to other API calls but ids and names for outputs returned to the User.
 Your task is to complete the corresponding api calls according to the plan.
@@ -105,12 +105,12 @@ The execution result should satisfy the following conditions:
 3. If the plan includes expressions such as "most", you should choose the first item from the response. For example, if the plan is "GET /trending/tv/day to get the most trending TV show today", you should choose the first item from the response.
 4. The execution result should be natural language and as verbose as possible. It must contain the information needed in the plan.
 
-Begin!
-
+Begin!<|im_end|>
+<|im_start|>user
 Background: {background}
 Plan: {api_plan}
-Thought: {agent_scratchpad}
-[/INST]"""
+Thought: {agent_scratchpad}<|im_end|>
+<|im_start|>assistant"""
 
 
 
