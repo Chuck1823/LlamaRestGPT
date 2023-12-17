@@ -82,21 +82,6 @@ Input: {{
     "description": "Set the volume for the current playback device."
 }}
 
-Example 4:
-Operation: GET
-Input: {{
-    "url": "https://api.spotify.com/v1/search",
-    "params": {{
-        "q": "Mariah Carey",
-        "type": ["track", "album"],
-        "market": "US",
-        "limit": "20",
-        "offset": "0",
-        "include_external": "audio",
-        "order": "popularity desc"
-    }}
-}}
-
 I will give you the background information and the plan you should execute.
 Background: background information which you can use to execute the plan, e.g., the id of a person.
 Plan: the plan of API calls to execute
@@ -316,14 +301,23 @@ class Caller(Chain):
             api_doc_for_parser = endpoint_docs_by_name.get(called_endpoint_name)
             if self.scenario == 'spotify' and endpoint_name == "GET /search":
                 if params is not None and 'type' in params:
-                    search_type = params['type']
+                    search_types = params["type"].split(',')
+                    logger.info(f"Search types: {search_types}")
+                    for idx, search_type in enumerate(search_types):
+                        search_types[idx] = search_type + 's'
                 else:
                     params_in_url = json.loads(action_input)['url'].split('&')
                     for param in params_in_url:
                         if 'type=' in param:
-                            search_type = param.split('=')[-1] + 's'
+                            search_types = param.split('=')[-1].split(',')
+                            logger.info(f"Search types: {search_types}")
+                            for idx, search_type in enumerate(search_types):
+                                search_types[idx] = search_type + 's'
                             break
-                api_doc_for_parser['responses']['content']['application/json']["schema"]['properties'] = {search_type: api_doc_for_parser['responses']['content']['application/json']["schema"]['properties'][search_type]}
+                
+                logger.info(f"Search types: {search_types}")
+                for search_type in search_types:
+                    api_doc_for_parser['responses']['content']['application/json']["schema"]['properties'] = {search_type: api_doc_for_parser['responses']['content']['application/json']["schema"]['properties'][search_type]}
 
             if not self.simple_parser:
                 response_parser = ResponseParser(
