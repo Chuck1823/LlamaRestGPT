@@ -316,8 +316,11 @@ class Caller(Chain):
                             break
                 
                 logger.info(f"Search types: {search_types}")
+                search_types_dict = {}
                 for search_type in search_types:
-                    api_doc_for_parser['responses']['content']['application/json']['schema']['properties'] = {search_type: api_doc_for_parser['responses']['content']['application/json']['schema']['properties'][search_type]}
+                    search_types_dict[search_type] = api_doc_for_parser['responses']['content']['application/json']['schema']['properties'][search_type]
+
+                api_doc_for_parser['responses']['content']['application/json']['schema']['properties'] = search_types_dict
 
             if not self.simple_parser:
                 response_parser = ResponseParser(
