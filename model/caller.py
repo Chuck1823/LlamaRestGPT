@@ -302,7 +302,6 @@ class Caller(Chain):
             if self.scenario == 'spotify' and endpoint_name == "GET /search":
                 if params is not None and 'type' in params:
                     search_types = params["type"].split(',')
-                    logger.info(f"Search types: {search_types}")
                     for idx, search_type in enumerate(search_types):
                         search_types[idx] = search_type + 's'
                 else:
@@ -310,7 +309,6 @@ class Caller(Chain):
                     for param in params_in_url:
                         if 'type=' in param:
                             search_types = param.split('=')[-1].split(',')
-                            logger.info(f"Search types: {search_types}")
                             for idx, search_type in enumerate(search_types):
                                 search_types[idx] = search_type + 's'
                             break
