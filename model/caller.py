@@ -313,7 +313,6 @@ class Caller(Chain):
                                 search_types[idx] = search_type + 's'
                             break
                 
-                logger.info(f"Search types: {search_types}")
                 search_types_dict = {}
                 for search_type in search_types:
                     search_types_dict[search_type] = api_doc_for_parser['responses']['content']['application/json']['schema']['properties'][search_type]
