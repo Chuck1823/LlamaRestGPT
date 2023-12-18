@@ -43,27 +43,27 @@ def main(model_name):
     requests_wrapper = Requests(headers=headers)
 
     if torch.cuda.is_available():
-        logger.info("GPU available")
-        logger.info(f"Num GPUs Available: {torch.cuda.device_count()}")
-        logger.info(f"Current device: {torch.cuda.get_device_name(0)}")
+        print("GPU available")
+        print(f"Num GPUs Available: {torch.cuda.device_count()}")
+        print(f"Current device: {torch.cuda.get_device_name(0)}")
         torch.cuda.set_device(0)
         try:
-            llm = LlamaCpp(model_path=os.path.join(ROOT_DIR, "..", model_name), n_ctx=20000, temperature=0.1, top_k=2, top_p=0.2, n_gpu_layers=40, n_batch=512, echo=True)
+            llm = LlamaCpp(model_path=os.path.join(ROOT_DIR, "..", model_name), n_ctx=50000, temperature=0.1, top_k=2, top_p=0.2, n_gpu_layers=40, n_batch=512, echo=True)
         except FileNotFoundError:
-            logger.info(f"Model {model_name} not found. Please make sure model exists one directory higher than project root directory.")
+            print(f"Model {model_name} not found. Please make sure model exists one directory higher than project root directory.")
             raise
         except Exception as e:
-            logger.info(f"Exception occured when creating model: {e}")
+            print(f"Exception occured when creating model: {e}")
             raise
     else:
-        logger.info("No GPU available")
+        print("No GPU available")
         try:
-            llm = LlamaCpp(model_path=os.path.join(ROOT_DIR, "..", model_name), n_ctx=20000, temperature=0.1, top_k=2, top_p=0.2, echo=True)
+            llm = LlamaCpp(model_path=os.path.join(ROOT_DIR, "..", model_name), n_ctx=50000, temperature=0.1, top_k=2, top_p=0.2, echo=True)
         except FileNotFoundError:
-            logger.info(f"Model {model_name} not found. Please make sure model exists one directory higher than project root directory.")
+            print(f"Model {model_name} not found. Please make sure model exists one directory higher than project root directory.")
             raise
         except Exception as e:
-            logger.info(f"Exception occured when creating model: {e}")
+            print(f"Exception occured when creating model: {e}")
             raise
 
     rest_gpt = RestGPT(llm, api_spec=api_spec, scenario='spotify', requests_wrapper=requests_wrapper, simple_parser=False)
