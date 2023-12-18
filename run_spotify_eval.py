@@ -48,7 +48,7 @@ def main(model_name):
         print(f"Current device: {torch.cuda.get_device_name(0)}")
         torch.cuda.set_device(0)
         try:
-            llm = LlamaCpp(model_path=os.path.join(ROOT_DIR, "..", model_name), n_ctx=50000, temperature=0.1, top_k=2, top_p=0.2, n_gpu_layers=40, n_batch=512, echo=True)
+            llm = LlamaCpp(model_path=os.path.join(ROOT_DIR, "..", model_name), n_ctx=40000, temperature=0.1, top_k=2, top_p=0.2, n_gpu_layers=40, n_batch=1024, echo=True)
         except FileNotFoundError:
             print(f"Model {model_name} not found. Please make sure model exists one directory higher than project root directory.")
             raise
@@ -58,7 +58,7 @@ def main(model_name):
     else:
         print("No GPU available")
         try:
-            llm = LlamaCpp(model_path=os.path.join(ROOT_DIR, "..", model_name), n_ctx=50000, temperature=0.1, top_k=2, top_p=0.2, echo=True)
+            llm = LlamaCpp(model_path=os.path.join(ROOT_DIR, "..", model_name), n_ctx=40000, temperature=0.1, top_k=2, top_p=0.2, echo=True)
         except FileNotFoundError:
             print(f"Model {model_name} not found. Please make sure model exists one directory higher than project root directory.")
             raise
