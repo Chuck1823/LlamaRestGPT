@@ -1,0 +1,677 @@
+[
+    {
+        "query": "Search for the top 3 tracks of Mariah Carey using the Spotify API.",
+        "solution": [
+            "GET /search?q=Mariah%20Carey%20top%203&type=track"
+        ]
+    },
+    {
+        "query": "Get information about Mariah Carey using the Spotify API.",
+        "solution": [
+            "GET /artists/{id}"
+        ]
+    },
+    {
+        "query": "Get Mariah Carey's albums using the Spotify API.",
+        "solution": [
+            "GET /artists/artist_id_1/albums"
+        ]
+    },
+    {
+        "query": "Get tracks from Mariah Carey's most recent album using the Spotify API.",
+        "solution": [
+            "GET /albums/album_id_1/tracks"
+        ]
+    },
+    {
+        "query": "Add Mariah Carey's most recent album to my library.",
+        "solution": [
+            "PUT /me/albums",
+            "PUT /me/player/pause"
+        ]
+    },
+    {
+        "query": "Get a list of albums saved in the user's library.",
+        "solution": [
+            "GET /me/albums"
+        ]
+    },
+    {
+        "query": "Create a new playlist named 'Mariah's Mix'.",
+        "solution": [
+            "POST /users/{user_id}/playlists"
+        ]
+    },
+    {
+        "query": "Add tracks from Mariah Carey's most recent album to 'Mariah's Mix' playlist.",
+        "solution": [
+            "POST /playlists/playlist_id_2/tracks"
+        ]
+    },
+    {
+        "query": "Remove the second track by Mariah Carey from 'Mariah's Mix' playlist.",
+        "solution": [
+            "DELETE /playlists/playlist_id_2/tracks"
+        ]
+    },
+    {
+        "query": "Get the updated list of tracks in 'Mariah's Mix' playlist.",
+        "solution": [
+            "GET /playlists/playlist_id_2/tracks"
+        ]
+    },
+    {
+        "query": "Add the first song of The Dark Side of the Moon in my playback queue.",
+        "solution": [
+            "GET /search",
+            "GET /albums/{id}/tracks",
+            "POST /me/player/queue"
+        ]
+    },
+    {
+        "query": "Add Summertime Sadness by Lana Del Rey in my first playlist.",
+        "solution": [
+            "GET /search",
+            "GET /me/playlists",
+            "POST /playlists/{playlist_id}/tracks"
+        ]
+    },
+    {
+        "query": "Skip to the next track and set the volume to 60.",
+        "solution": [
+            "POST /me/player/next",
+            "PUT /me/player/volume"
+        ]
+    },
+    {
+        "query": "Put the song now being played into My Music.",
+        "solution": [
+            "GET /me/player/currently-playing",
+            "PUT /me/tracks"
+        ]
+    },
+    {
+        "query": "Append the first song of the newest album of my following first artist to my player queue.",
+        "solution": [
+            "GET /me/following",
+            "GET /artists/{id}/albums",
+            "GET /albums/{id}/tracks",
+            "POST /me/player/queue"
+        ]
+    },
+    {
+        "query": "Follow the artist of the song now playing.",
+        "solution": [
+            "GET /me/player/currently-playing",
+            "GET /tracks/{id}",
+            "PUT /me/following"
+        ]
+    },
+    {
+        "query": "Play a song from Taylor Swift's newest album.",
+        "solution": [
+            "GET /search",
+            "GET /artists/{id}/albums",
+            "PUT /me/player/play"
+        ]
+    },
+    {
+        "query": "Play me some quiet songs.",
+        "solution": [
+            "GET /search",
+            "PUT /me/player/play"
+        ]
+    },
+    {
+        "query": "Follow the artist of the first song recently played.",
+        "solution": [
+            "GET /me/player/currently-playing",
+            "GET /tracks/{id}",
+            "PUT /me/following"
+        ]
+    },
+    {
+        "query": "Switch to the next song and set the single track repeat mode.",
+        "solution": [
+            "POST /me/player/next",
+            "PUT /me/player/repeat"
+        ]
+    },
+    {
+        "query": "Save Jay Chou's album Mojito.",
+        "solution": [
+            "GET /search",
+            "PUT /me/albums"
+        ]
+    },
+    {
+        "query": "Rename my first playlist to 'My First'.",
+        "solution": [
+            "GET /me/playlists",
+            "PUT /playlists/{playlist_id}"
+        ]
+    },
+    {
+        "query": "Remove following from the artist of the currently playing music.",
+        "solution": [
+            "GET /me/player/currently-playing",
+            "GET /tracks/{id}",
+            "DELETE /me/following"
+        ]
+    },
+    {
+        "query": "Pause playback, turn down the volume and resume playing.",
+        "solution": [
+            "PUT /me/player/pause",
+            "PUT /me/player/volume",
+            "PUT /me/player/play"
+        ]
+    },
+    {
+        "query": "Add songs from the current playing queue to a new playlist called 'Current'.",
+        "solution": [
+            "GET /me/player/queue",
+            "GET /me",
+            "POST /users/{user_id}/playlists",
+            "PUT /playlists/{playlist_id}"
+        ]
+    },
+    {
+        "query": "What is the name of the song I playing right now?",
+        "solution": [
+            "GET /me/player/currently-playing"
+        ]
+    },
+    {
+        "query": "Remove the first album from my music.",
+        "solution": [
+            "GET /me/albums",
+            "DELETE /me/albums"
+        ]
+    },
+    {
+        "query": "Show me the albums I saved.",
+        "solution": [
+            "GET /me/albums"
+        ]
+    },
+    {
+        "query": "Follow the artist of the song which is playing right now.",
+        "solution": [
+            "GET /me/player/currently-playing",
+            "GET /tracks/{id}",
+            "PUT /me/following"
+        ]
+    },
+    {
+        "query": "Recommend me some tracks with the same genre of the music currently playing.",
+        "solution": [
+            "GET /me/player/currently-playing",
+            "GET /search"
+        ]
+    },
+    {
+        "query": "Append the first track in The Beatle's newest album to my 'My Rock' playlist.",
+        "solution": [
+            "GET /search",
+            "GET /artists/{id}/albums",
+            "POST /playlists/{playlist_id}/tracks",
+            "PUT /playlists/{playlist_id}"
+        ]
+    },
+    {
+        "query": "Make top tracks of Taylor Swift a new playlist named 'Love Taylor'.",
+        "solution": [
+            "GET /artists/{id}/top-tracks",
+            "GET /me",
+            "POST /users/{user_id}/playlists",
+            "POST /playlists/{playlist_id}/tracks"
+        ]
+    },
+    {
+        "query": "Who is my favorite artist?",
+        "solution": [
+            "GET /me/top/{type}"
+        ]
+    },
+    {
+        "query": "Give me a song of my favorite artist.",
+        "solution": [
+            "GET /me/top/{type}",
+            "GET /artists/{id}"
+        ]
+    },
+    {
+        "query": "Delete all music from my 'My R&B' playlist and rename it as 'Test'.",
+        "solution": [
+            "GET /me/playlists",
+            "DELETE /playlists/{playlist_id}/tracks",
+            "PUT /playlists/{playlist_id}"
+        ]
+    },
+    {
+        "query": "Show me the album information of the song currently playing.",
+        "solution": [
+            "GET /me/player/currently-playing",
+            "GET /tracks/{id}"
+        ]
+    },
+    {
+        "query": "Pause device 'My PC' if it is now playing something.",
+        "solution": [
+            "GET /me/player",
+            "PUT /me/player/pause"
+        ]
+    },
+    {
+        "query": "Pause current song and resume it on 'My PC'.",
+        "solution": [
+            "PUT /me/player/pause",
+            "GET /me/player/devices",
+            "PUT /me/player/play"
+        ]
+    },
+    {
+        "query": "Show me the name of Maroon 5's newest album.",
+        "solution": [
+            "GET /search",
+            "GET /artists/{id}/albums"
+        ]
+    },
+    {
+        "query": "Recommend more artists based on my first following artist.",
+        "solution": [
+            "GET /me/following",
+            "GET /artists/{id}/related-artists"
+        ]
+    },
+    {
+        "query": "Unfollow the artist of the song now playing and skip to the next song.",
+        "solution": [
+            "GET /me/player/currently-playing",
+            "DELETE /me/following",
+            "POST /me/player/next"
+        ]
+    },
+    {
+        "query": "Follow Taylor Swift.",
+        "solution": [
+            "GET /search",
+            "PUT /me/following"
+        ]
+    },
+    {
+        "query": "Make my top tracks a new playlist called 'My Top'.",
+        "solution": [
+            "GET /me/top/{type}",
+            "GET /me",
+            "POST /users/{user_id}/playlists",
+            "POST /playlists/{playlist_id}/tracks"
+        ]
+    },
+    {
+        "query": "Remove the first song from my playlist 'My Rock'.",
+        "solution": [
+            "GET /me/playlists",
+            "GET /playlists/{playlist_id}/tracks",
+            "DELETE /playlists/{playlist_id}/tracks"
+        ]
+    },
+    {
+        "query": "Add top songs of the first of my following artist to My Music.",
+        "solution": [
+            "GET /me/following",
+            "GET /artists/{id}/top-tracks",
+            "PUT /me/tracks"
+        ]
+    },
+    {
+        "query": "Follow all the artists involved in the playlist 'My R&B'.",
+        "solution": [
+            "GET /me",
+            "GET /playlists/{playlist_id}",
+            "PUT /me/following"
+        ]
+    },
+    {
+        "query": "Remove the second track from my playlist 'My R&B'.",
+        "solution": [
+            "GET /me/playlists",
+            "GET /playlists/{playlist_id}/tracks",
+            "DELETE /playlists/{playlist_id}/tracks"
+        ]
+    },
+    {
+        "query": "Remove the third track from My Music.",
+        "solution": [
+            "GET /me/tracks",
+            "DELETE /me/tracks"
+        ]
+    },
+    {
+        "query": "Follow all the singers involved in the song When You Believe.",
+        "solution": [
+            "GET /search",
+            "GET /track"
+        ]
+    },
+      {
+        "query": "Add Mariah Carey's most recent album to my library.",
+        "solution": [
+          "PUT /me/albums",
+          "GET /me/albums"
+        ]
+    },
+      {
+        "query": "Create a new playlist named 'Mariah's Mix' and extract the ID of the created playlist.",
+        "solution": [
+          "POST /users/{user_id}/playlists",
+          "POST /playlists/{playlist_id_2}/tracks"
+        ]
+      },
+      {
+        "query": "Add tracks from Mariah Carey's most recent album to 'Mariah's Mix' playlist.",
+        "solution": [
+          "POST /playlists/{playlist_id_2}/tracks"
+        ]
+      },
+      {
+        "query": "Remove the second track by Mariah Carey from 'Mariah's Mix' playlist.",
+        "solution": [
+          "DELETE /playlists/{playlist_id_2}/tracks"
+        ]
+      },
+      {
+        "query": "Get the updated list of tracks in 'Mariah's Mix' playlist and extract the IDs and names of the updated tracks.",
+        "solution": [
+          "GET /playlists/{playlist_id_2}/tracks"
+        ]
+      },
+      {
+        "query": "Get a list of albums saved in the user's library and extract the IDs and names of the saved albums.",
+        "solution": [
+          "GET /me/albums"
+        ]
+      },
+      {
+        "query": "Add the first song of The Dark Side of the Moon in my playback queue.",
+        "solution": [
+          "GET /search",
+          "GET /albums/{id}/tracks",
+          "POST /me/player/queue"
+        ]
+      },
+      {
+        "query": "Add Summertime Sadness by Lana Del Rey in my first playlist.",
+        "solution": [
+          "GET /search",
+          "GET /me/playlists",
+          "POST /playlists/{playlist_id}/tracks"
+        ]
+      },
+      {
+        "query": "Skip to the next track and set the volume to 60.",
+        "solution": [
+          "POST /me/player/next",
+          "PUT /me/player/volume"
+        ]
+      },
+      {
+        "query": "Put the song now being played into My Music.",
+        "solution": [
+          "GET /me/player/currently-playing",
+          "PUT /me/tracks"
+        ]
+      },
+      {
+        "query": "Append the first song of the newest album of my following first artist to my player queue.",
+        "solution": [
+          "GET /me/following",
+          "GET /artists/{id}/albums",
+          "GET /albums/{id}/tracks",
+          "POST /me/player/queue"
+        ]
+      },
+      {
+        "query": "Follow the artist of the song now playing.",
+        "solution": [
+          "GET /me/player/currently-playing",
+          "GET /tracks/{id}",
+          "PUT /me/following"
+        ]
+      },
+      {
+        "query": "Play a song from Taylor Swift's newest album.",
+        "solution": [
+          "GET /search",
+          "GET /artists/{id}/albums",
+          "PUT /me/player/play"
+        ]
+      },
+      {
+        "query": "Play me some quiet songs.",
+        "solution": [
+          "GET /search",
+          "PUT /me/player/play"
+        ]
+      },
+      {
+        "query": "Follow the artist of the first song recently played.",
+        "solution": [
+          "GET /me/player/currently-playing",
+          "GET /tracks/{id}",
+          "PUT /me/following"
+        ]
+      },
+      {
+        "query": "Switch to the next song and set the single track repeat mode.",
+        "solution": [
+          "POST /me/player/next",
+          "PUT /me/player/repeat"
+        ]
+      },
+      {
+        "query": "Save Jay Chou's album Mojito.",
+        "solution": [
+          "GET /search",
+          "PUT /me/albums"
+        ]
+      },
+      {
+        "query": "Rename my first playlist to 'My First'.",
+        "solution": [
+          "GET /me/playlists",
+          "PUT /playlists/{playlist_id}"
+        ]
+      },
+      {
+        "query": "Remove following from the artist of the currently playing music.",
+        "solution": [
+          "GET /me/player/currently-playing",
+          "GET /tracks/{id}",
+          "DELETE /me/following"
+        ]
+      },
+      {
+        "query": "Pause playback, turn down the volume and resume playing.",
+        "solution": [
+          "PUT /me/player/pause",
+          "PUT /me/player/volume",
+          "PUT /me/player/play"
+        ]
+      },
+      {
+        "query": "Add songs from the current playing queue to a new playlist called 'Current'.",
+        "solution": [
+          "GET /me/player/queue",
+          "GET /me",
+          "POST /users/{user_id}/playlists",
+          "PUT /playlists/{playlist_id}"
+        ]
+      },
+      {
+        "query": "What is the name of the song I playing right now?",
+        "solution": [
+          "GET /me/player/currently-playing"
+        ]
+      },
+      {
+        "query": "Remove the first album from my music.",
+        "solution": [
+          "GET /me/albums",
+          "DELETE /me/albums"
+        ]
+      },
+      {
+        "query": "Show me the albums I saved.",
+        "solution": [
+          "GET /me/albums"
+        ]
+      },
+      {
+        "query": "Follow the artist of the song which is playing right now.",
+        "solution": [
+          "GET /me/player/currently-playing",
+          "GET /tracks/{id}",
+          "PUT /me/following"
+        ]
+      },
+      {
+        "query": "Recommend me some tracks with the same genre of the music currently playing.",
+        "solution": [
+          "GET /me/player/currently-playing",
+          "GET /search"
+        ]
+      },
+      {
+        "query": "Append the first track in The Beatle's newest album to my 'My Rock' playlist.",
+        "solution": [
+          "GET /search",
+          "GET /artists/{id}/albums",
+          "POST /playlists/{playlist_id}/tracks",
+          "PUT /playlists/{playlist_id}"
+        ]
+      },
+      {
+        "query": "Make top tracks of Taylor Swift a new playlist named 'Love Taylor'.",
+        "solution": [
+          "GET /artists/{id}/top-tracks",
+          "GET /me",
+          "POST /users/{user_id}/playlists",
+          "POST /playlists/{playlist_id}/tracks"
+        ]
+      },
+      {
+        "query": "Who is my favorite artist?",
+        "solution": [
+          "GET /me/top/{type}"
+        ]
+      },
+      {
+        "query": "Give me a song of my favorite artist.",
+        "solution": [
+          "GET /me/top/{type}",
+          "GET /artists/{id}"
+        ]
+      },
+      {
+        "query": "Delete all music from my 'My R&B' playlist and rename it as 'Test'.",
+        "solution": [
+          "GET /me/playlists",
+          "DELETE /playlists/{playlist_id}/tracks",
+          "PUT /playlists/{playlist_id}"
+        ]
+      },
+      {
+        "query": "Show me the album information of the song currently playing.",
+        "solution": [
+          "GET /me/player/currently-playing",
+          "GET /tracks/{id}"
+        ]
+      },
+      {
+        "query": "Pause device 'My PC' if it is now playing something.",
+        "solution": [
+          "GET /me/player",
+          "PUT /me/player/pause"
+        ]
+      },
+      {
+        "query": "Pause current song and resume it on 'My PC'.",
+        "solution": [
+          "PUT /me/player/pause",
+          "GET /me/player/devices",
+          "PUT /me/player/play"
+        ]
+      },
+      {
+        "query": "Show me the name of Maroon 5's newest album.",
+        "solution": [
+          "GET /search",
+          "GET /artists/{id}/albums"
+        ]
+      },
+      {
+        "query": "Recommend more artists based on my first following artist.",
+        "solution": [
+          "GET /me/following",
+          "GET /artists/{id}/related-artists"
+        ]
+      },
+      {
+        "query": "Unfollow the artist of the song now playing and skip to the next song.",
+        "solution": [
+          "GET /me/player/currently-playing",
+          "DELETE /me/following",
+          "POST /me/player/next"
+        ]
+      },
+      {
+        "query": "Follow Taylor Swift.",
+        "solution": [
+          "GET /search",
+          "PUT /me/following"
+        ]
+      },
+      {
+        "query": "Make my top tracks a new playlist called 'My Top'.",
+        "solution": [
+          "GET /me/top/{type}",
+          "GET /me",
+          "POST /users/{user_id}/playlists",
+          "POST /playlists/{playlist_id}/tracks"
+        ]
+      },
+      {
+        "query": "Remove the first song from my playlist 'My Rock'.",
+        "solution": [
+          "GET /me/playlists",
+          "GET /playlists/{playlist_id}/tracks",
+          "DELETE /playlists/{playlist_id}/tracks"
+        ]
+      },
+      {
+        "query": "Add top songs of the first of my following artist to My Music.",
+        "solution": [
+          "GET /me/following",
+          "GET /artists/{id}/top-tracks",
+          "PUT /me/tracks"
+        ]
+      },
+      {
+        "query": "Follow all the artists involved in the playlist 'My R&B'.",
+        "solution": [
+          "GET /me",
+          "GET /playlists/{playlist_id}",
+          "PUT /me/following"
+        ]
+      },
+      {
+        "query": "Remove the second track from my playlist 'My R&B'.",
+        "solution": [
+          "GET /me/playlists",
+          "GET /playlists/{playlist_id}/tracks",
+          "DELETE /playlists/{playlist_id}/tracks"
+        ]
+    }
+]
